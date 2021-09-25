@@ -10,15 +10,18 @@ import UIKit
 import RealmSwift
 
 class ProjectsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
     let tableView = UITableView()
     let userRealm: Realm
     var userData: User?
     var notificationToken: NotificationToken?
 
     init(userRealmConfiguration: Realm.Configuration) {
-        // TODO: fetch user data object
+        
+        self.userRealm = try! Realm( configuration: userRealmConfiguration )
+        super.init( nibName: nil, bundle: nil )
+
     }
-    
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

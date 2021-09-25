@@ -10,6 +10,7 @@ import RealmSwift
 
 // The WelcomeViewController handles login and account creation.
 class WelcomeViewController: UIViewController {
+    
     let usernameField = UITextField()
     let signInButton = UIButton(type: .roundedRect)
     let errorLabel = UILabel()
@@ -21,8 +22,8 @@ class WelcomeViewController: UIViewController {
         }
     }
 
-
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         view.backgroundColor = .white
 
@@ -49,7 +50,7 @@ class WelcomeViewController: UIViewController {
             // The activity indicator is centered over the rest of the view.
             activityIndicator.centerYAnchor.constraint(equalTo: guide.centerYAnchor),
             activityIndicator.centerXAnchor.constraint(equalTo: guide.centerXAnchor)
-            ])
+        ])
 
         // Add some text at the top of the view to explain what to do.
         let infoLabel = UILabel()
@@ -80,6 +81,7 @@ class WelcomeViewController: UIViewController {
 
     // Turn on or off the activity indicator.
     func setLoading(_ loading: Bool) {
+        
         if loading {
             activityIndicator.startAnimating()
             errorLabel.text = ""
@@ -89,13 +91,26 @@ class WelcomeViewController: UIViewController {
         
         usernameField.isEnabled = !loading
         signInButton.isEnabled = !loading
+        
     }
-
 
     @objc func signIn() {
-        // TODO: Replace the following code with code to launch the tasks view.
-        let alertController = UIAlertController(title: "TODO", message: "Implement sign-in functionality in WelcomeViewController.swift", preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        self.present(alertController, animated: true)
+        
+        // Go to the list of tasks in the user object contained in the user realm.
+        var config = Realm.Configuration.defaultConfiguration
+        
+        // This configuration step is not really needed, but if we add Sync later, this allows us to keep the tasks we made.
+        config.fileURL!.deleteLastPathComponent()
+        config.fileURL!.appendPathComponent("project=\(self.username!)")
+        config.fileURL!.appendPathExtension("realm")
+        
+        navigationController!.pushViewController(
+            
+            TasksViewController(realmConfiguration: config, title: "\(username!)'s Tasks"),
+            animated: true
+            
+        )
+        
     }
+
 }
